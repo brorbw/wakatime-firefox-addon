@@ -6,6 +6,12 @@ Activity is added as one project called `github.com` and each repository as a br
 
 ## How to build it
 
+### Prerequisites
+
+- `node`
+- `npm`
+- `web-ext`
+
 ```sh
 # install dependencies
 npm install
