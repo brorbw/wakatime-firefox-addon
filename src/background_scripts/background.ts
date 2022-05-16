@@ -1,8 +1,8 @@
 import { WakatimeClient } from './wakatimeclient'
 import { retriveApiKey, saveApiKey, sendHeartbeat } from './utils'
 
-let timeAtLastHeartBeat: number = 0;
-let isIdle: boolean = false;
+let timeAtLastHeartBeat = 0;
+let isIdle = false;
 let client: WakatimeClient;
 
 const init = async () => {

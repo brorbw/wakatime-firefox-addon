@@ -15,7 +15,7 @@ export class WakatimeClient {
 	}
 	async heartbeatRequest(data: any) {
 		const url = '/users/bbw/heartbeats'
-		let response = await this.serverConfig.post(url, data).then((response: any) => response.data);
+		const response = await this.serverConfig.post(url, data).then((response: any) => response.data);
 		return response;
 	}
 }
