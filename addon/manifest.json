@@ -30,15 +30,5 @@
         "tabs",
         "<all_urls>",
         "storage"
-    ],
-    "content_scripts": [
-        {
-            "matches": [
-                "*://*.mozilla.org/*"
-            ],
-            "js": [
-                "borderify.js"
-            ]
-        }
     ]
 }
