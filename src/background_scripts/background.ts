@@ -45,7 +45,7 @@ setInterval(async () => {
 	timeAtLastHeartBeat = Date.now();
 }, 30000);
 
-browser.idle.setDetectionInterval(240);
+browser.idle.setDetectionInterval(60);
 browser.idle.onStateChanged.addListener(checkIfHeartBeatShouldBeSent);
 browser.tabs.onCreated.addListener(checkTab);
 browser.tabs.onUpdated.addListener(checkTab);
