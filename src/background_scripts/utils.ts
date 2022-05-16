@@ -6,7 +6,7 @@ const defaultURL = 'https://wakatime.com/api/v1/'
 export const retriveApiKey = async () => {
 	const { key, url } = await browser.storage.sync.get(['key', 'url']);
 	return { key: key, url: url };
-};
+}
 
 export const saveApiKey = async (key: string, url: string) => {
 	browser.storage.sync.set({
@@ -17,7 +17,7 @@ export const saveApiKey = async (key: string, url: string) => {
 		() => { console.log("Credentials not saved") }
 	);
 
-};
+}
 
 export const sendHeartbeat = async (client: WakatimeClient, tab: any) => {
 	const heartbeat = buildHeartbeat(tab);
@@ -29,7 +29,7 @@ export const sendHeartbeat = async (client: WakatimeClient, tab: any) => {
 	} else {
 		console.log("Could not send data to Wakatime API server");
 	}
-};
+}
 
 const buildHeartbeat = (tab: any) => {
 	const url = new URL(tab.url);
@@ -40,4 +40,4 @@ const buildHeartbeat = (tab: any) => {
 	// const branch = tab.title.split("·")[0].slice(0, -1).toLowerCase().replace(/\ /g, "-");
 	const heartbeat = new Heartbeat(url.toString(), domain, Date.now(), "main", project, "github");
 	return heartbeat;
-};
+}
