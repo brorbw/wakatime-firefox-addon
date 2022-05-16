@@ -12,6 +12,8 @@ Activity is added as one project called `github.com` and each repository as a br
 - `npm`
 - `web-ext`
 
+### Build
+
 ```sh
 # install dependencies
 npm install
