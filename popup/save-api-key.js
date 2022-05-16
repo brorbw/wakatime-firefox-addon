@@ -1,7 +1,7 @@
-const keyNode = document.getElementById("key");
-const urlNode = document.getElementById("url");
+const keyNode = document.getElementById('key');
+const urlNode = document.getElementById('url');
 
-document.getElementById("pad-bg").addEventListener("click", (e) => {
+document.getElementById('pad-bg').addEventListener('click', (e) => {
 	const sendingMessage = browser.runtime.sendMessage({
 		eventType: 'setSettings',
 		key: keyNode.value,
@@ -11,21 +11,21 @@ document.getElementById("pad-bg").addEventListener("click", (e) => {
 		const getSettings = browser.runtime.sendMessage({ eventType: 'getSettings' });
 		getSettings.then((result) => {
 			if (!result) return;
-			updateFields(result.key, result.url)
+			updateFields(result.key, result.url);
 		});
 	});
 });
 
 const updateFields = (key, url) => {
 	if (key) {
-		keyNode.value = "********";
+		keyNode.value = '********';
 	}
 	if (url) {
 		urlNode.value = url;
 	}
-}
+};
 
 const getSettings = browser.runtime.sendMessage({ eventType: 'getSettings' });
 getSettings.then((result) => {
-	updateFields(result.key, result.url)
+	updateFields(result.key, result.url);
 });

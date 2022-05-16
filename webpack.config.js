@@ -1,11 +1,11 @@
-const path = require("path");
+const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-	devtool: "source-map",
+	devtool: 'source-map',
 	entry: {
-		background_scripts: "./src/background_scripts/background.ts",
-		popup: "./popup/save-api-key.js"
+		background_scripts: './src/background_scripts/background.ts',
+		popup: './popup/save-api-key.js'
 	},
 	module: {
 		rules: [
@@ -19,13 +19,13 @@ module.exports = {
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 		fallback: {
-			"stream": require.resolve("stream-browserify"),
-			"buffer": require.resolve("buffer")
+			'stream': require.resolve('stream-browserify'),
+			'buffer': require.resolve('buffer')
 		},
 	},
 	output: {
-		path: path.resolve(__dirname, "addon"),
-		filename: "[name]/index.js"
+		path: path.resolve(__dirname, 'addon'),
+		filename: '[name]/index.js'
 	},
 	plugins: [
 		// Work around for Buffer is undefined:
