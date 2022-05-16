@@ -13,4 +13,3 @@ This addon will only track time used on GitHub. It can use any wakatime compatib
 - Add build for chrome
 - Add license (MIT)
 - Add better README
-- Sign and publish
