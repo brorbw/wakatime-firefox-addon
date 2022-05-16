@@ -32,8 +32,3 @@ npm run watch
 # or
 npm run build
 ```
-
-## TODO
-
-- Add build for chrome
-- Add license (MIT)
