@@ -1,15 +1,10 @@
 {
     "manifest_version": 2,
     "name": "Wakatime client",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Wakatime client",
     "icons": {
         "32": "icons/wakatime.png"
-    },
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "wakatimeclient@nobad.coffee"
-        }
     },
     "browser_action": {
         "default_icon": "icons/wakatime.png",
