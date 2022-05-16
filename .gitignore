@@ -1,2 +1,7 @@
 /node_modules/
-/addon/
+/addon/background_scripts
+/addon/popup/index.js
+/addon/popup/index.js.map
+/addon/web-ext-artifacts
+/.log/
+/.DS_Store

@@ -1,0 +1,44 @@
+{
+    "manifest_version": 2,
+    "name": "Webpack Example",
+    "version": "1.0.0",
+    "description": "Wakatime client",
+    "icons": {
+        "32": "icons/wakatime.png"
+    },
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "wakatimeclient@nobad.coffee"
+        }
+    },
+    "browser_action": {
+        "default_icon": "icons/wakatime.png",
+        "default_title": "Wakatime api",
+        "default_popup": "popup/menu.html",
+        "browser_style": true
+    },
+    "background": {
+        "scripts": [
+            "background_scripts/index.js"
+        ]
+    },
+    "permissions": [
+        "webRequest",
+        "*://wakapi.nobad.coffee/api/*",
+        "activeTab",
+        "idle",
+        "tabs",
+        "<all_urls>",
+        "storage"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.mozilla.org/*"
+            ],
+            "js": [
+                "borderify.js"
+            ]
+        }
+    ]
+}
