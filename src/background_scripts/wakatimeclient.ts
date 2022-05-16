@@ -14,7 +14,7 @@ export class WakatimeClient {
 		});
 	}
 	async heartbeatRequest(data: any) {
-		const url = '/users/bbw/heartbeats'
+		const url = '/users/current/heartbeats'
 		const response = await this.serverConfig.post(url, data).then((response: any) => response.data);
 		return response;
 	}
