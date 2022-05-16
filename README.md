@@ -12,3 +12,4 @@ This addon will only track time used on Github.
 
 - Add build for chrome
 - Add license (MIT)
+- Add better README
