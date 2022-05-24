@@ -5,7 +5,7 @@ const defaultURL = 'https://wakatime.com/api/v1/'
 
 export const retrieveApiKey = async () => {
 	const { key, url } = await browser.storage.sync.get(['key', 'url']);
-	return { key: key, url: url };
+	return { key, url };
 }
 
 export const saveApiKey = async (key: string, url: string) => {
