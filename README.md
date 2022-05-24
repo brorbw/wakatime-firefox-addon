@@ -23,7 +23,7 @@ npm run build
 cd addon
 # package as an addon
 web-ext build
-# sing
+# sign
 web-ext sign --api-key=$API_KEY --api-secret=$API_SECRET
 ```
 
