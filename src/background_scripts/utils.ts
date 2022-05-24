@@ -31,7 +31,7 @@ export const sendHeartbeat = async (client: WakatimeClient, tab: browser.tabs.Ta
 	}
 }
 
-const buildHeartbeat = (tab: any) => {
+const buildHeartbeat = (tab: browser.tabs.Tab) => {
 	const url = new URL(tab.url);
 	const domain = url.hostname;
 	if (domain !== 'github.com') return;

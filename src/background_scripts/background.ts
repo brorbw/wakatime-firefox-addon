@@ -21,7 +21,7 @@ const checkIfHeartbeatShouldBeSent = (newState: browser.idle.IdleState) => {
 const onCreate = async (tab: browser.tabs.Tab) => {
 	if (!client) return;
 	if (isIdle) return;
-	if (!tab && !tab.active) return;
+	if (!tab.active) return;
 	sendHeartbeat(client, tab);
 	timeAtLastHeartbeat = Date.now();
 }
@@ -35,15 +35,19 @@ const onUpdate = async (_: any, __: any, tab: browser.tabs.Tab) => {
 }
 
 setInterval(async () => {
-	if (!client) return;
-	if (isIdle) return;
-	if ((Date.now() - timeAtLastHeartbeat) / 1000 < 120) return;
-	const currentTabs = await browser.tabs.query({ currentWindow: true, active: true });
-	if (!currentTabs) return;
-	currentTabs.forEach((tab) => {
-		sendHeartbeat(client, tab);
-	});
-	timeAtLastHeartbeat = Date.now();
+	try {
+		if (!client) return;
+		if (isIdle) return;
+		if ((Date.now() - timeAtLastHeartbeat) / 1000 < 120) return;
+		const currentTabs = await browser.tabs.query({ currentWindow: true, active: true });
+		if (!currentTabs) return;
+		currentTabs.forEach((tab) => {
+			sendHeartbeat(client, tab);
+		});
+		timeAtLastHeartbeat = Date.now();
+	} catch (e) {
+		init();
+	}
 }, 30_000);
 
 browser.idle.setDetectionInterval(60);
