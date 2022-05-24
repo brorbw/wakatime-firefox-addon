@@ -18,17 +18,17 @@ const checkIfHeartBeatShouldBeSent = (newState: browser.idle.IdleState) => {
 	isIdle = newState === "active" || false;
 }
 
-const checkTab = async (tabID: any) => {
+const onCreate = async (tab: browser.tabs.Tab) => {
 	if (!client) return;
 	if (isIdle) return;
-	const tabs = await browser.tabs.query({});
-	let tab: any;
-	tabs.forEach((t) => {
-		if (tabID == t.id) {
-			tab = t;
-			return;
-		}
-	});
+	if (!tab && !tab.active) return;
+	sendHeartbeat(client, tab);
+	timeAtLastHeartbeat = Date.now();
+}
+
+const onUpdate = async (tabID: any, change: any, tab: browser.tabs.Tab) => {
+	if (!client) return;
+	if (isIdle) return;
 	if (!tab && !tab.active) return;
 	sendHeartbeat(client, tab);
 	timeAtLastHeartBeat = Date.now();
@@ -47,8 +47,8 @@ setInterval(async () => {
 
 browser.idle.setDetectionInterval(60);
 browser.idle.onStateChanged.addListener(checkIfHeartBeatShouldBeSent);
-browser.tabs.onCreated.addListener(checkTab);
-browser.tabs.onUpdated.addListener(checkTab);
+browser.tabs.onCreated.addListener(onCreate);
+browser.tabs.onUpdated.addListener(onUpdate);
 
 
 browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {

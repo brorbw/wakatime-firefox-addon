@@ -19,7 +19,7 @@ export const saveApiKey = async (key: string, url: string) => {
 
 }
 
-export const sendHeartbeat = async (client: WakatimeClient, tab: any) => {
+export const sendHeartbeat = async (client: WakatimeClient, tab: browser.tabs.Tab) => {
 	const heartbeat = buildHeartbeat(tab);
 	if (!heartbeat) return;
 	const response = await client.heartbeatRequest(heartbeat)
