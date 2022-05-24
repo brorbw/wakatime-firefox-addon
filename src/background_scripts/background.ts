@@ -29,7 +29,7 @@ const onCreate = async (tab: browser.tabs.Tab) => {
 const onUpdate = async (tabID: any, change: any, tab: browser.tabs.Tab) => {
 	if (!client) return;
 	if (isIdle) return;
-	if (!tab && !tab.active) return;
+	if (!tab.active) return;
 	sendHeartbeat(client, tab);
 	timeAtLastHeartbeat = Date.now();
 }
