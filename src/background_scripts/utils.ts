@@ -22,8 +22,8 @@ export const saveApiKey = async (key: string, url: string) => {
 export const sendHeartbeat = async (client: WakatimeClient, tab: browser.tabs.Tab) => {
 	const heartbeat = buildHeartbeat(tab);
 	if (!heartbeat) return;
-	const response = await client.heartbeatRequest(heartbeat)
-	if (response.responses[0][1] === 201) {
+	const success = await client.heartbeatRequest(heartbeat)
+	if (success) {
 		console.log("Data sent to Wakatime API server");
 		return
 	} else {
