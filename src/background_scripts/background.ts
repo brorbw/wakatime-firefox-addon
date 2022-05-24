@@ -1,7 +1,7 @@
 import { WakatimeClient } from './wakatimeclient'
 import { retrieveApiKey, saveApiKey, sendHeartbeat } from './utils'
 
-let timeAtLastHeartBeat = 0;
+let timeAtLastHeartbeat = 0;
 let isIdle = false;
 let client: WakatimeClient;
 
@@ -14,7 +14,7 @@ const init = async () => {
 init();
 
 // event handlers
-const checkIfHeartBeatShouldBeSent = (newState: browser.idle.IdleState) => {
+const checkIfHeartbeatShouldBeSent = (newState: browser.idle.IdleState) => {
 	isIdle = newState === "active" || false;
 }
 
@@ -31,22 +31,23 @@ const onUpdate = async (tabID: any, change: any, tab: browser.tabs.Tab) => {
 	if (isIdle) return;
 	if (!tab && !tab.active) return;
 	sendHeartbeat(client, tab);
-	timeAtLastHeartBeat = Date.now();
+	timeAtLastHeartbeat = Date.now();
 }
+
 setInterval(async () => {
 	if (!client) return;
 	if (isIdle) return;
-	if ((Date.now() - timeAtLastHeartBeat) / 1000 < 120) return;
+	if ((Date.now() - timeAtLastHeartbeat) / 1000 < 120) return;
 	const currentTabs = await browser.tabs.query({ currentWindow: true, active: true });
 	if (!currentTabs) return;
 	currentTabs.forEach((tab) => {
 		sendHeartbeat(client, tab);
 	});
-	timeAtLastHeartBeat = Date.now();
-}, 30000);
+	timeAtLastHeartbeat = Date.now();
+}, 30_000);
 
 browser.idle.setDetectionInterval(60);
-browser.idle.onStateChanged.addListener(checkIfHeartBeatShouldBeSent);
+browser.idle.onStateChanged.addListener(checkIfHeartbeatShouldBeSent);
 browser.tabs.onCreated.addListener(onCreate);
 browser.tabs.onUpdated.addListener(onUpdate);
 
