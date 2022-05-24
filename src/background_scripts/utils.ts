@@ -3,7 +3,7 @@ import { WakatimeClient } from './wakatimeclient'
 
 const defaultURL = 'https://wakatime.com/api/v1/'
 
-export const retriveApiKey = async () => {
+export const retrieveApiKey = async () => {
 	const { key, url } = await browser.storage.sync.get(['key', 'url']);
 	return { key: key, url: url };
 }

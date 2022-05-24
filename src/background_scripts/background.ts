@@ -1,12 +1,12 @@
 import { WakatimeClient } from './wakatimeclient'
-import { retriveApiKey, saveApiKey, sendHeartbeat } from './utils'
+import { retrieveApiKey, saveApiKey, sendHeartbeat } from './utils'
 
 let timeAtLastHeartBeat = 0;
 let isIdle = false;
 let client: WakatimeClient;
 
 const init = async () => {
-	const savedCredentials = await retriveApiKey();
+	const savedCredentials = await retrieveApiKey();
 	if (!savedCredentials.key || !savedCredentials.url) return;
 	client = new WakatimeClient(savedCredentials.key, savedCredentials.url);
 	console.log("Wakatime API initialised");
@@ -14,7 +14,7 @@ const init = async () => {
 init();
 
 // event handlers
-const checkIfHeartBeatShouldBeSent = (newState: any) => {
+const checkIfHeartBeatShouldBeSent = (newState: browser.idle.IdleState) => {
 	isIdle = newState === "active" || false;
 }
 
@@ -56,6 +56,6 @@ browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 		saveApiKey(message.key, message.url);
 		init();
 	} else if (message.eventType == 'getSettings') {
-		return retriveApiKey();
+		return retrieveApiKey();
 	}
 });
