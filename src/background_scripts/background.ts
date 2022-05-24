@@ -15,7 +15,7 @@ init();
 
 // event handlers
 const checkIfHeartbeatShouldBeSent = (newState: browser.idle.IdleState) => {
-	isIdle = newState === "active" || false;
+	isIdle = newState === "active";
 }
 
 const onCreate = async (tab: browser.tabs.Tab) => {
