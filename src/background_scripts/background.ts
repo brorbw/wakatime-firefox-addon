@@ -26,7 +26,7 @@ const onCreate = async (tab: browser.tabs.Tab) => {
 	timeAtLastHeartbeat = Date.now();
 }
 
-const onUpdate = async (tabID: any, change: any, tab: browser.tabs.Tab) => {
+const onUpdate = async (_: any, __: any, tab: browser.tabs.Tab) => {
 	if (!client) return;
 	if (isIdle) return;
 	if (!tab.active) return;
@@ -52,7 +52,7 @@ browser.tabs.onCreated.addListener(onCreate);
 browser.tabs.onUpdated.addListener(onUpdate);
 
 
-browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener(async (message, _, __) => {
 	if (message.eventType == 'setSettings') {
 		saveApiKey(message.key, message.url);
 		init();
