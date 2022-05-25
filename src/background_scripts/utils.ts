@@ -24,10 +24,10 @@ export const sendHeartbeat = async (client: WakatimeClient, tab: browser.tabs.Ta
 	if (!heartbeat) return;
 	const success = await client.heartbeatRequest(heartbeat)
 	if (success) {
-		console.log("Data sent to Wakatime API server");
+		console.log(new Date, "Data sent to Wakatime API server");
 		return
 	} else {
-		console.log("Could not send data to Wakatime API server");
+		console.log(new Date, "Could not send data to Wakatime API server");
 	}
 }
 
