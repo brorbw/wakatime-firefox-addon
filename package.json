@@ -7,7 +7,8 @@
     "dev": "webpack --mode=development",
     "build": "webpack",
     "watch": "webpack --mode=development --watch --progress",
-    "package": "web-ext build --source-dir=./addon"
+    "package": "web-ext build --source-dir=./addon",
+    "sign": "web-ext sign --source-dir=./addon --api-key=$API_KEY --api-secret=$API_SECRET"
   },
   "license": "MPL-2.0",
   "devDependencies": {
