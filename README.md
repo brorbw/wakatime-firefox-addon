@@ -22,9 +22,11 @@ npm run build
 # this will create a extension in ./addon
 cd addon
 # package as an addon
-web-ext build
+npm run package
 # sign
-web-ext sign --api-key=$API_KEY --api-secret=$API_SECRET
+export API_KEY=yourapikey
+export API_SECRET=yourapisecret
+npm run sign
 ```
 
 ## For development and temporary addons
