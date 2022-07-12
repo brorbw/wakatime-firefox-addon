@@ -7,3 +7,5 @@
 *.DS_Store
 /.DS_Store
 /.envrc
+/addon/.web-extension-id
+/web-ext-artifacts/
