@@ -15,7 +15,14 @@ init();
 
 // event handlers
 const checkIfHeartbeatShouldBeSent = (newState: browser.idle.IdleState) => {
-	isIdle = newState === "active";
+	console.log("browser state change:" + newState);
+	if (newState !== "active" || newState !== null) {
+		isIdle = true;
+		browser.idle.setDetectionInterval(15);
+	} else {
+		isIdle = false;
+		browser.idle.setDetectionInterval(60);
+	};
 }
 
 const onCreate = async (tab: browser.tabs.Tab) => {
@@ -50,11 +57,10 @@ setInterval(async () => {
 	}
 }, 30_000);
 
-browser.idle.setDetectionInterval(60);
 browser.idle.onStateChanged.addListener(checkIfHeartbeatShouldBeSent);
+browser.idle.setDetectionInterval(60);
 browser.tabs.onCreated.addListener(onCreate);
 browser.tabs.onUpdated.addListener(onUpdate);
-
 
 browser.runtime.onMessage.addListener(async (message, _, __) => {
 	if (message.eventType == 'setSettings') {
