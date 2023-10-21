@@ -2,63 +2,71 @@ import { WakatimeClient } from './wakatimeclient'
 import { retrieveApiKey, saveApiKey, sendHeartbeat } from './utils'
 
 let timeAtLastHeartbeat = 0;
-let isIdle = false;
 let client: WakatimeClient;
 
 const init = async () => {
 	const savedCredentials = await retrieveApiKey();
 	if (!savedCredentials.key || !savedCredentials.url) return;
 	client = new WakatimeClient(savedCredentials.key, savedCredentials.url);
-	console.log("Wakatime API initialised");
+	console.log('Wakatime API initialised');
 }
 init();
 
 // event handlers
-const checkIfHeartbeatShouldBeSent = (newState: browser.idle.IdleState) => {
-	console.log("browser state change:" + newState);
-	if (newState !== "active" || newState !== null) {
-		isIdle = true;
-		browser.idle.setDetectionInterval(15);
-	} else {
-		isIdle = false;
-		browser.idle.setDetectionInterval(60);
-	};
+
+const handleIdleStateChange = (newState: browser.idle.IdleState) => {
+	// Idle state change
+	checkIfHeartbeatShouldbeSent();
+	timeAtLastHeartbeat = Date.now();
+}
+
+const checkIfHeartbeatShouldbeSent = async () => {
+	if (!client) return;
+
+	// If the browser have been idle for more than 60 seconds
+	// we skip this heatbeat.
+	const browserIdleState = await browser.idle.queryState(15);
+	if (browserIdleState !== 'active') return;
+
+	sendHeartbeat(client);
 }
 
 const onCreate = async (tab: browser.tabs.Tab) => {
-	if (!client) return;
-	if (isIdle) return;
-	if (!tab.active) return;
-	sendHeartbeat(client, tab);
+	//A new tab is created
+	checkIfHeartbeatShouldbeSent();
 	timeAtLastHeartbeat = Date.now();
 }
 
 const onUpdate = async (_: any, __: any, tab: browser.tabs.Tab) => {
-	if (!client) return;
-	if (isIdle) return;
-	if (!tab.active) return;
-	sendHeartbeat(client, tab);
+	// A tab changes
+
+	// onUpdate is called multiple times when refreshing a tab
+	// to spare the server we only call it again if it has been
+	// more than asecond since last time we sent a heartbeat
+	if ((Date.now() - timeAtLastHeartbeat) / 1000 > 1) {
+		checkIfHeartbeatShouldbeSent();
+	};
 	timeAtLastHeartbeat = Date.now();
+	return
 }
 
 setInterval(async () => {
 	try {
-		if (!client) return;
-		if (isIdle) return;
+		// Only send heartbeats if it has been less than two minutes
+		// while we are continuously viewing a file.
+		// https://wakatime.com/faq#accuracy
 		if ((Date.now() - timeAtLastHeartbeat) / 1000 < 120) return;
-		const currentTabs = await browser.tabs.query({ currentWindow: true, active: true });
-		if (!currentTabs) return;
-		currentTabs.forEach((tab) => {
-			sendHeartbeat(client, tab);
-		});
+
+		checkIfHeartbeatShouldbeSent();
+
 		timeAtLastHeartbeat = Date.now();
 	} catch (e) {
 		init();
 	}
-}, 30_000);
+}, 30_00);
 
-browser.idle.onStateChanged.addListener(checkIfHeartbeatShouldBeSent);
-browser.idle.setDetectionInterval(60);
+browser.idle.onStateChanged.addListener(handleIdleStateChange);
+browser.idle.setDetectionInterval(15);
 browser.tabs.onCreated.addListener(onCreate);
 browser.tabs.onUpdated.addListener(onUpdate);
 

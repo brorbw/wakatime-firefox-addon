@@ -19,16 +19,20 @@ export const saveApiKey = async (key: string, url: string) => {
 
 }
 
-export const sendHeartbeat = async (client: WakatimeClient, tab: browser.tabs.Tab) => {
-	const heartbeat = buildHeartbeat(tab);
-	if (!heartbeat) return;
-	const success = await client.heartbeatRequest(heartbeat)
-	if (success) {
-		console.log(new Date, "Data sent to Wakatime API server");
-		return
-	} else {
-		console.log(new Date, "Could not send data to Wakatime API server");
-	}
+export const sendHeartbeat = async (client: WakatimeClient) => {
+	const currentTabs = await browser.tabs.query({ currentWindow: true, active: true });
+	if (!currentTabs) return;
+	await Promise.all(currentTabs.map(async (tab) => {
+		const heartbeat = buildHeartbeat(tab);
+		if (!heartbeat) return;
+		const success = await client.heartbeatRequest(heartbeat)
+		if (success) {
+			console.log(new Date, "Data sent to Wakatime API server");
+			return
+		} else {
+			console.log(new Date, "Could not send data to Wakatime API server");
+		}
+	}));
 }
 
 const buildHeartbeat = (tab: browser.tabs.Tab) => {
