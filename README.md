@@ -2,7 +2,7 @@
 
 This addon will only track time used on GitHub. It can use any wakatime compatible server.
 
-Activity is added as one project called `github.com` and each repository as a branch to this project. As an example `brorbw/wakatime-firefox-addon` would be a branch under `github.com` in your dashboard. This is a little bit hacky but adding each repository as it's own project cluttered the interface IMO.
+Activity is added to projects based on the repository name. The language will be `github`.
 
 Firefox addon store link https://addons.mozilla.org/en-US/firefox/addon/wakatime-client
 
