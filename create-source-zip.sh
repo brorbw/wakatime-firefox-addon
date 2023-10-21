@@ -1,22 +1,26 @@
-FILE_NAME=$(uuidgen)
-cp -r ./ /tmp/$FILE_NAME
+file_name=$(uuidgen)
+rm -r ./wakatime-source.zip
+cp -r ./ /tmp/$file_name
 
-rm -r /tmp/$FILE_NAME/addon
-rm -r /tmp/$FILE_NAME/node_modules
-rm -r /tmp/$FILE_NAME/web-ext-artifacts
-rm -rf /tmp/$FILE_NAME/.git
-rm -r /tmp/$FILE_NAME/.gitignore
-rm -r /tmp/$FILE_NAME/.DS_Store
-rm -r /tmp/$FILE_NAME/.envrc
-rm -r /tmp/$FILE_NAME/.eslintignore
-rm -r /tmp/$FILE_NAME/.eslintrc
-rm -r /tmp/$FILE_NAME/create-source-zip.sh
-rm -rf /tmp/$FILE_NAME/.log
+rm -r /tmp/$file_name/addon
+rm -r /tmp/$file_name/node_modules
+rm -r /tmp/$file_name/web-ext-artifacts
+rm -rf /tmp/$file_name/.git
+rm -r /tmp/$file_name/.gitignore
+rm -r /tmp/$file_name/.DS_Store
+rm -r /tmp/$file_name/.envrc
+rm -r /tmp/$file_name/.eslintignore
+rm -r /tmp/$file_name/.eslintrc
+rm -r /tmp/$file_name/create-source-zip.sh
+rm -rf /tmp/$file_name/.log
 
-tree /tmp/$FILE_NAME
+tree /tmp/$file_name
 
-zip -r ./wakatime-source.zip /tmp/$FILE_NAME 2>&1 >/dev/null
+project_directory=$(pwd)
 
-if [[ -n $FILE_NAME ]]; then
-	rm -r /tmp/$FILE_NAME
+pushd /tmp/$file_name
+zip -r $project_directory/wakatime-source.zip ./* 2>&1 >/dev/null
+
+if [[ -n $file_name ]]; then
+	rm -rf /tmp/$file_name
 fi
