@@ -1,21 +1,24 @@
-import axios from 'axios';
 
 export class WakatimeClient {
 	serverUrl: string;
 	apiKey: string;
-	serverConfig: any;
+	headers: any;
+
 
 	constructor(apiKey: any, serverUrl: any) {
 		this.apiKey = apiKey;
 		this.serverUrl = serverUrl;
-		this.serverConfig = axios.create({
-			baseURL: this.serverUrl,
-			headers: { Authorization: `Basic ${Buffer.from(this.apiKey).toString('base64')}` },
-		});
+		this.headers = new Headers();
+		this.headers.append('Authorization', `Basic ${Buffer.from(this.apiKey).toString('base64')}`);
 	}
+
 	async heartbeatRequest(data: any) {
 		const url = '/users/current/heartbeats'
-		const response = await this.serverConfig.post(url, data).then((response: any) => response.data);
-		return response.responses[0][1] === 201;
+		const response = await fetch(this.serverUrl + url, {
+			method: 'post',
+			headers: this.headers,
+			body: JSON.stringify(data),
+		});
+		return response.status === 201
 	}
 }
