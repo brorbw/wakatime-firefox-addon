@@ -35,12 +35,33 @@ export const sendHeartbeat = async (client: WakatimeClient) => {
 	}));
 }
 
+const parseURL = (url: URL) => {
+	let path = url.pathname;
+	let search = url.search;
+	let entity = url.toString()
+	let branch = "github.com"
+	let [_, organisation, repository] = url.pathname.split("/");
+	let project = repository
+	if (organisation == 'notification') {
+		project = 'github.com'
+	}
+	//TODO: Include category based on tree/blob/pulls etc
+	if (path.includes('blob')) {
+		const matchedGroups = path.match(/blob\/(?<branch>\w*)\/(?<filePath>*)/);
+		const { branch, filePath } = matchedGroups.groups
+		const entity = project + filePath
+	}
+	if (path.includes('tree')) {
+		const matchedGroups = path.match(/tree\/(?<branch>\w*)/);
+		const branch = matchedGroups?.groups.branch
+		const entity = url.toString()
+	}
+}
+
 const buildHeartbeat = (tab: browser.tabs.Tab) => {
 	const url = new URL(tab.url);
 	const domain = url.hostname;
 	if (domain !== 'github.com') return;
-	const [_, organisation, repository] = url.pathname.split("/");
-	const project = `${organisation}/${repository}`
 	// const branch = tab.title.split("·")[0].slice(0, -1).toLowerCase().replace(/\ /g, "-");
 	const heartbeat = new Heartbeat(url.toString(), domain, Date.now(), project, 'github.com', "github");
 	return heartbeat;
