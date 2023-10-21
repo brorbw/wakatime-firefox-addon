@@ -16,7 +16,6 @@ export const saveApiKey = async (key: string, url: string) => {
 		() => { console.log("Credentials saved") },
 		() => { console.log("Credentials not saved") }
 	);
-
 }
 
 export const sendHeartbeat = async (client: WakatimeClient) => {
@@ -37,7 +36,7 @@ export const sendHeartbeat = async (client: WakatimeClient) => {
 
 const parseURL = (url: URL) => {
 	let path = url.pathname;
-	let search = url.search;
+	// let search = url.search;
 	let entity = url.toString()
 	let branch = "github.com"
 	let [_, organisation, repository] = url.pathname.split("/");
@@ -47,14 +46,20 @@ const parseURL = (url: URL) => {
 	}
 	//TODO: Include category based on tree/blob/pulls etc
 	if (path.includes('blob')) {
-		const matchedGroups = path.match(/blob\/(?<branch>\w*)\/(?<filePath>*)/);
-		const { branch, filePath } = matchedGroups.groups
-		const entity = project + filePath
+		const matchedGroups = path.match(/blob\/(?<branch>\w*)\/(?<filePath>.*)/);
+		branch = matchedGroups?.groups.branch;
+		const filePath = matchedGroups?.groups.filePath;
+		entity = `${project}/${filePath}`;
 	}
 	if (path.includes('tree')) {
 		const matchedGroups = path.match(/tree\/(?<branch>\w*)/);
-		const branch = matchedGroups?.groups.branch
-		const entity = url.toString()
+		branch = matchedGroups?.groups.branch;
+		entity = url.toString()
+	}
+	return {
+		entity,
+		branch,
+		project
 	}
 }
 
@@ -62,7 +67,7 @@ const buildHeartbeat = (tab: browser.tabs.Tab) => {
 	const url = new URL(tab.url);
 	const domain = url.hostname;
 	if (domain !== 'github.com') return;
-	// const branch = tab.title.split("·")[0].slice(0, -1).toLowerCase().replace(/\ /g, "-");
-	const heartbeat = new Heartbeat(url.toString(), domain, Date.now(), project, 'github.com', "github");
+	const { entity, branch, project } = parseURL(url)
+	const heartbeat = new Heartbeat(entity, domain, Date.now(), branch, project, 'github');
 	return heartbeat;
 }
